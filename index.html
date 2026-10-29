@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="AGASTU Study Hub: notes, solved questions and AI study help for CBSE Classes 11 and 12.">
+  <title>AGASTU Study Hub</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #141c32;
+      --panel2: #1c2742;
+      --text: #f4f6ff;
+      --muted: #aab5d0;
+      --purple: #9270ff;
+      --blue: #58b9ff;
+      --border: #2b3858;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+      cursor: pointer;
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      background: var(--purple);
+      font-weight: 650;
+    }
+
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #0b1020ed;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      color: var(--purple);
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+    }
+
+    nav { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .92rem;
+    }
+
+    nav a:hover { color: white; }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 28px 20px 70px;
+    }
+
+    .hero {
+      padding: 42px 28px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(135deg, #24204b, #142943 75%, #121a31);
+    }
+
+    .eyebrow {
+      color: #c2b2ff;
+      font-weight: 750;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-size: .78rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.12;
+      margin: 10px 0 16px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, #b8a2ff, #6ed5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p { max-width: 650px; color: var(--muted); }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+
+    .secondary {
+      background: transparent;
+      border: 1px solid #5d6a8b;
+    }
+
+    section { margin-top: 42px; scroll-margin-top: 90px; }
+
+    .section-heading { margin-bottom: 18px; }
+
+    .section-heading h2 { margin: 0; font-size: 1.65rem; }
+
+    .section-heading p { margin: 4px 0; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+    }
+
+    .card h3 { margin: 8px 0 4px; }
+
+    .card p { color: var(--muted); margin: 4px 0 14px; font-size: .93rem; }
+
+    .subject-icon { font-size: 1.8rem; }
+
+    .class-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .class-btn {
+      flex: 1;
+      min-width: 135px;
+      text-align: left;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+
+    .class-btn.active {
+      background: #29214e;
+      border-color: var(--purple);
+    }
+
+    .class-btn strong { display: block; font-size: 1.25rem; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar button {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+    }
+
+    .toolbar button.active { background: #453483; border-color: var(--purple); }
+
+    .content-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .content-box h3 { color: #c6b5ff; }
+
+    .content-box li { margin: 9px 0; }
+
+    .note-label {
+      color: var(--blue);
+      font-size: .82rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 100px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 18px 0;
+    }
+
+    .message {
+      padding: 13px 16px;
+      border-radius: 14px;
+      max-width: 90%;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .bot { background: var(--panel2); align-self: flex-start; }
+    .user { background: #49348b; align-self: flex-end; }
+
+    .chat-form { display: flex; gap: 10px; }
+
+    input, textarea {
+      width: 100%;
+      min-width: 0;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #465578;
+      color: var(--text);
+      background: #0b1020;
+    }
+
+    .hint { color: var(--muted); font-size: .85rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 25px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 760px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .nav { align-items: flex-start; flex-direction: column; }
+      nav { gap: 12px; }
+      .hero { padding: 30px 20px; }
+      main { padding-inline: 14px; }
+    }
+
+    @media (max-width: 390px) {
+      .grid { grid-template-columns: 1fr; }
+      .chat-form { flex-direction: column; }
+      .message { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">AGASTU <span style="color:white">STUDY HUB</span></div>
+      <nav aria-label="Main navigation">
+        <a href="#classes">Classes</a>
+        <a href="#subjects">Subjects</a>
+        <a href="#notes">Notes</a>
+        <a href="#solver">AI Doubts</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">Your learning space</div>
+      <h1>Learn smarter.<br><span>Understand everything.</span></h1>
+      <p>CBSE Class 11 and 12 study notes, solved questions, formulas, and a space to ask your doubts.</p>
+      <div class="actions">
+        <button onclick="goTo('classes')">Start learning</button>
+        <button class="secondary" onclick="goTo('solver')">Ask a doubt</button>
+      </div>
+    </div>
+
+    <section id="classes">
+      <div class="section-heading">
+        <h2>Choose your class</h2>
+        <p>Choose a class to personalize the study material.</p>
+      </div>
+      <div class="class-buttons">
+        <button class="class-btn active" data-class="11" onclick="chooseClass('11')">
+          <strong>Class 11</strong>Foundation and concepts
+        </button>
+        <button class="class-btn" data-class="12" onclick="chooseClass('12')">
+          <strong>Class 12</strong>Boards and revision
+        </button>
+      </div>
+      <p id="selected-class" class="hint">Selected: Class 11</p>
+    </section>
+
+    <section id="subjects">
+      <div class="section-heading">
+        <h2>Explore subjects</h2>
+        <p>Choose a subject to view its study material.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div class="subject-icon">⚡</div>
+          <h3>Physics</h3>
+          <p>Concepts, formulas, and numericals.</p>
+          <button onclick="chooseSubject('Physics')">Open Physics</button>
+        </article>
+        <article class="card">
+          <div class="subject-icon">🧪</div>
+          <h3>Chemistry</h3>
+          <p>Reactions, concepts, and calculations.</p>
+          <button onclick="chooseSubject('Chemistry')">Open Chemistry</button>
+        </article>
+        <article class="card">
+          <div class="subject-icon">📐</div>
+          <h3>Mathematics</h3>
+          <p>Formulas and step-by-step solutions.</p>
+          <button onclick="chooseSubject('Mathematics')">Open Maths</button>
+        </article>
+        <article class="card">
+          <div class="subject-icon">💻</div>
+          <h3>Computer Science</h3>
+          <p>Python, SQL, and programming basics.</p>
+          <button onclick="chooseSubject('Computer Science')">Open CS</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="notes">
+      <div class="section-heading">
+        <h2>Study notes</h2>
+        <p>Explore sample notes and solved questions. More chapters can be added later.</p>
+      </div>
+      <div class="toolbar" aria-label="Choose subject for notes">
+        <button class="active" data-note-subject="Physics" onclick="chooseSubject('Physics')">Physics</button>
+        <button data-note-subject="Chemistry" onclick="chooseSubject('Chemistry')">Chemistry</button>
+        <button data-note-subject="Mathematics" onclick="chooseSubject('Mathematics')">Mathematics</button>
+        <button data-note-subject="Computer Science" onclick="chooseSubject('Computer Science')">Computer Science</button>
+      </div>
+      <div class="content-box" id="note-content" aria-live="polite"></div>
+    </section>
+
+    <section id="solver">
+      <div class="section-heading">
+        <h2>AI doubt solver 🤖</h2>
+        <p>Ask a question and get a clear, step-by-step explanation.</p>
+      </div>
+      <div class="content-box">
+        <div class="note-label">AGASTU AI</div>
+        <div id="chat-messages" class="chat-messages" aria-live="polite">
+          <div class="message bot">Welcome to AGASTU Study Hub! Ask me a study question. The AI connection will be enabled after secure backend setup.</div>
+        </div>
+        <form class="chat-form" id="chat-form">
+          <input id="chat-input" aria-label="Your question" placeholder="Type your study question..." required>
+          <button type="submit" id="send-button">Send</button>
+        </form>
+        <p class="hint" id="chat-status">AI setup pending</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> AGASTU Study Hub · Keep learning, one concept at a time.</footer>
+
+  <script>
+    let currentClass = "11";
+    let currentSubject = "Physics";
+
+    const notes = {
+      Physics: {
+        "11": {
+          title: "Physical quantities and motion",
+          points: [
+            "A scalar quantity has magnitude only, such as distance, speed, and mass.",
+            "A vector quantity has magnitude and direction, such as displacement, velocity, and force.",
+            "Average speed = total distance ÷ total time.",
+            "Average velocity = displacement ÷ total time."
+          ],
+          question: "A car travels 100 m in 20 s. Find its average speed.",
+          solution: "Average speed = distance ÷ time = 100 ÷ 20 = 5 m/s."
+        },
+        "12": {
+          title: "Electric current and Ohm's law",
+          points: [
+            "Electric current is the rate of flow of electric charge.",
+            "Current: I = Q/t. Its SI unit is ampere (A).",
+            "Ohm's law: V = IR, when physical conditions such as temperature remain constant.",
+            "Resistance: R = V/I. Its SI unit is ohm (Ω)."
+          ],
+          question: "A 6 Ω resistor is connected across 12 V. Find the current.",
+          solution: "Using I = V/R, I = 12/6 = 2 A."
+        }
+      },
+      Chemistry: {
+        "11": {
+          title: "Mole concept",
+          points: [
+            "One mole contains approximately 6.022 × 10²³ specified particles.",
+            "Number of moles = given mass ÷ molar mass.",
+            "Molar mass is expressed in g mol⁻¹ when mass is measured in grams.",
+            "Always write the units in numerical answers."
+          ],
+          question: "How many moles are present in 18 g of water? Molar mass = 18 g/mol.",
+          solution: "Moles = mass ÷ molar mass = 18 ÷ 18 = 1 mol."
+        },
+        "12": {
+          title: "Chemical kinetics",
+          points: [
+            "Reaction rate describes the change in concentration per unit time.",
+            "A catalyst provides an alternative pathway with lower activation energy.",
+            "For a first-order reaction, half-life t½ = 0.693/k.",
+            "The rate law must be determined from experimental evidence."
+          ],
+          question: "A first-order reaction has k = 0.693 min⁻¹. Find its half-life.",
+          solution: "t½ = 0.693/k = 0.693/0.693 = 1 minute."
+        }
+      },
+      Mathematics: {
+        "11": {
+          title: "Trigonometric identity",
+          points: [
+            "Fundamental identity: sin²x + cos²x = 1.",
+            "tan x = sin x / cos x, where cos x ≠ 0.",
+            "1 + tan²x = sec²x, where the expressions are defined.",
+            "Check the domain before dividing by a trigonometric expression."
+          ],
+          question: "If sin x = 3/5 and x is acute, find cos x.",
+          solution: "cos²x = 1 − sin²x = 1 − 9/25 = 16/25. Since x is acute, cos x = 4/5."
+        },
+        "12": {
+          title: "Differentiation",
+          points: [
+            "The derivative measures the instantaneous rate of change.",
+            "d(xⁿ)/dx = nxⁿ⁻¹ for applicable real powers.",
+            "d(sin x)/dx = cos x.",
+            "d(cos x)/dx = −sin x."
+          ],
+          question: "Differentiate y = x³ + 2x² − 5x.",
+          solution: "dy/dx = 3x² + 4x − 5, using the power rule term by term."
+        }
+      },
+      "Computer Science": {
+        "11": {
+          title: "Python fundamentals",
+          points: [
+            "Python is a high-level programming language.",
+            "Common data types include int, float, str, bool, list, and tuple.",
+            "Use # to begin a single-line comment.",
+            "Indentation is important in Python blocks."
+          ],
+          question: "What is the output of print(7 // 2)?",
+          solution: "The output is 3. The // operator performs floor division."
+        },
+        "12": {
+          title: "SQL fundamentals",
+          points: [
+            "SQL is used to work with relational databases.",
+            "SELECT retrieves data from a table.",
+            "WHERE filters rows using a condition.",
+            "ORDER BY sorts query results."
+          ],
+          question: "Write a query to display all columns from a table named STUDENT.",
+          solution: "SELECT * FROM STUDENT;"
+        }
+      }
+    };
+
+    function goTo(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+
+    function chooseClass(value) {
+      currentClass = value;
+      document.querySelectorAll("[data-class]").forEach(button => {
+        button.classList.toggle("active", button.dataset.class === value);
+      });
+      document.getElementById("selected-class").textContent =
+        "Selected: Class " + currentClass;
+      renderNotes();
+    }
+
+    function chooseSubject(subject) {
+      currentSubject = subject;
+      document.querySelectorAll("[data-note-subject]").forEach(button => {
+        button.classList.toggle("active", button.dataset.noteSubject === subject);
+      });
+      renderNotes();
+      goTo("notes");
+    }
+
+    function renderNotes() {
+      const data = notes[currentSubject][currentClass];
+      const container = document.getElementById("note-content");
+
+      container.replaceChildren();
+
+      const title = document.createElement("h3");
+      title.textContent = "Class " + currentClass + " · " + data.title;
+      container.appendChild(title);
+
+      const list = document.createElement("ul");
+      data.points.forEach(point => {
+        const item = document.createElement("li");
+        item.textContent = point;
+        list.appendChild(item);
+      });
+      container.appendChild(list);
+
+      const qTitle = document.createElement("h3");
+      qTitle.textContent = "Solved question";
+      container.appendChild(qTitle);
+
+      const question = document.createElement("p");
+      question.textContent = data.question;
+      container.appendChild(question);
+
+      const solution = document.createElement("p");
+      solution.textContent = data.solution;
+      container.appendChild(solution);
+    }
+
+    function addMessage(text, role) {
+      const message = document.createElement("div");
+      message.className = "message " + role;
+      message.textContent = text;
+      const messages = document.getElementById("chat-messages");
+      messages.appendChild(message);
+      messages.scrollTop = messages.scrollHeight;
+      return message;
+    }
+
+    document.getElementById("chat-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const input = document.getElementById("chat-input");
+      const question = input.value.trim();
+
+      if (!question) return;
+
+      addMessage(question, "user");
+      input.value = "";
+
+      addMessage(
+        "The AI backend is not connected yet. Your question is ready, but an actual AI answer requires a secure server connection.",
+        "bot"
+      );
+
+      document.getElementById("chat-status").textContent =
+        "AI setup pending";
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderNotes();
+  </script>
+</body>
+</html>
