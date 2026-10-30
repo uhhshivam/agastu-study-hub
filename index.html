@@ -538,23 +538,53 @@
       return message;
     }
 
-    document.getElementById("chat-form").addEventListener("submit", event => {
-      event.preventDefault();
-      const input = document.getElementById("chat-input");
-      const question = input.value.trim();
+  
+document.getElementById("chat-form").addEventListener("submit", async event => {
+  event.preventDefault();
 
-      if (!question) return;
+  const input = document.getElementById("chat-input");
+  const question = input.value.trim();
+  const status = document.getElementById("chat-status");
+  const button = document.getElementById("send-button");
 
-      addMessage(question, "user");
-      input.value = "";
+  if (!question) return;
 
-      addMessage(
-        "The AI backend is not connected yet. Your question is ready, but an actual AI answer requires a secure server connection.",
-        "bot"
-      );
+  addMessage(question, "user");
+  input.value = "";
+  button.disabled = true;
+  status.textContent = "AGASTU AI is thinking...";
 
-      document.getElementById("chat-status").textContent =
-        "AI setup pending";
+  const reply = addMessage("Please wait...", "bot");
+
+  try {
+    const response = await fetch(
+      "https://agastu-ai-backend-1.onrender.com/ask",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Server error: " + response.status);
+    }
+
+    reply.textContent = data.answer || "No answer received.";
+    status.textContent = "Connected to AGASTU AI";
+
+  } catch (error) {
+    reply.textContent = "Error: " + error.message;
+    status.textContent = "Connection failed";
+  } finally {
+    button.disabled = false;
+  }
+});
+
     });
 
     document.getElementById("year").textContent = new Date().getFullYear();
